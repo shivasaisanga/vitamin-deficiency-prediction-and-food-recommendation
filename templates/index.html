@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero"><div class="container">
+  <div>
+    <span class="pill">🧪 ML-powered · free · private</span>
+    <h1>Know your vitamins.<br><span class="grad">Eat what you need.</span></h1>
+    <p class="lead">Enter your vitamin levels and get an instant deficiency check with a personalised food plan, saved to your account and ready to download as a PDF report.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('register') }}">Create free account →</a>
+      <a class="btn btn-ghost" href="{{ url_for('login') }}">Sign in</a>
+    </div>
+    <div class="stats">
+      <div><b>6</b><span>vitamins checked</span></div>
+      <div><b>26k+</b><span>training samples</span></div>
+      <div><b>PDF</b><span>downloadable report</span></div>
+    </div>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <div class="float"><span class="e">🥕</span><div>Vitamin A<small>Vision &amp; skin</small></div></div>
+    <div class="float"><span class="e">🍊</span><div>Vitamin C<small>Immunity</small></div></div>
+    <div class="float"><span class="e">☀️</span><div>Vitamin D<small>Strong bones</small></div></div>
+    <div class="float"><span class="e">🥬</span><div>Vitamin K<small>Blood health</small></div></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="container">
+  <h2>How it works</h2><p class="sub">Three simple steps from numbers to a healthier plate.</p>
+  <div class="grid3">
+    <div class="card feature"><div class="ico">📝</div><h3>1. Enter your levels</h3><p>Type in values from your lab report for vitamins A, B, C, D, E and K.</p></div>
+    <div class="card feature"><div class="ico">🧠</div><h3>2. Instant prediction</h3><p>Machine-learning models flag which vitamins are low and which are healthy.</p></div>
+    <div class="card feature"><div class="ico">📄</div><h3>3. Get your plan</h3><p>See foods to eat, track past results and download a clean PDF report.</p></div>
+  </div>
+</div></section>
+
+<section class="section" style="background:#fff"><div class="container">
+  <h2>Vitamins we cover</h2><p class="sub">Each result comes with why it matters and where to get it.</p>
+  <div class="grid6">
+    {% for v in ORDER %}{% set i = VITAMINS[v] %}
+    <div class="card vit-tile"><div class="badge" style="background:{{ i.color }}22">{{ i.icon }}</div>
+      <div><h3 style="font-size:1.05rem">{{ i.name }}</h3><p class="muted" style="margin:0;font-size:.9rem">{{ i.role }}</p></div></div>
+    {% endfor %}
+  </div>
+</div></section>
+
+<section class="section"><div class="container">
+  <div class="cta"><h2>Ready to check your levels?</h2><p>Create an account in under a minute.</p>
+    <a class="btn" href="{{ url_for('register') }}">Get started free</a></div>
+</div></section>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Home{% endblock %} · Vitamin Deficiency Prediction & Food Recommendation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💊</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+{% block nav %}
+<header class="nav"><div class="container">
+  <a class="logo" href="{{ url_for('index') }}"><span class="logo-mark">💊</span>Vitamin Deficiency Prediction & Food Recommendation</a>
+  <nav class="nav-links">
+    {% if g.user %}
+      <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint=='dashboard' }}">Dashboard</a>
+      <a href="{{ url_for('check') }}" class="{{ 'active' if request.endpoint=='check' }}">New check</a>
+      <a href="{{ url_for('history') }}" class="{{ 'active' if request.endpoint=='history' }}">Reports</a>
+      <form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="link">Sign out</button></form>
+    {% else %}
+      <a href="{{ url_for('login') }}">Sign in</a>
+      <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm" style="color:#fff">Get started</a>
+    {% endif %}
+  </nav>
+</div></header>
+{% endblock %}
+{% with msgs = get_flashed_messages(with_categories=true) %}
+{% if msgs %}<div class="flashes">{% for c, m in msgs %}<div class="flash {{ c }}"><span>{{ m }}</span><button aria-label="Dismiss">×</button></div>{% endfor %}</div>{% endif %}
+{% endwith %}
+{% block content %}{% endblock %}
+{% block footer %}<footer class="footer">Vitamin Deficiency Prediction & Food Recommendation · Educational use only, not a medical diagnosis.</footer>{% endblock %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{% extends "base.html" %}{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="page-head"><h1>Your reports</h1><a class="btn btn-primary" href="{{ url_for('check') }}">＋ New check</a></div>
+  {% if items %}
+  <table class="table">
+    <thead><tr><th>Report</th><th class="hide-sm">Date</th><th>Vitamins (A B C D E K)</th><th></th></tr></thead>
+    <tbody>
+    {% for a in items %}{% set flags = a.flags %}
+    <tr>
+      <td><a href="{{ url_for('result', aid=a.id) }}"><b>#{{ '%05d' % a.id }}</b></a></td>
+      <td class="hide-sm muted">{{ a.created_at }}</td>
+      <td>{% include "_status_dots.html" %}</td>
+      <td><div class="row-actions">
+        <a class="btn btn-ghost btn-sm" href="{{ url_for('result', aid=a.id) }}">View</a>
+        <a class="btn btn-ghost btn-sm" href="{{ url_for('report_pdf', aid=a.id) }}">PDF</a>
+        <form method="post" action="{{ url_for('delete', aid=a.id) }}" data-confirm="Delete this report?">
+          <input type="hidden" name="csrf" value="{{ csrf_token() }}"><button class="btn btn-danger btn-sm">Delete</button></form>
+      </div></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="card empty"><div class="big">📭</div><h3>No reports yet</h3><p class="muted">Your saved checks will appear here.</p><a class="btn btn-primary" href="{{ url_for('check') }}">Start a check</a></div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="welcome">
+    <div><h1>Hello, {{ g.user.name.split()[0] }} 👋</h1><p>Ready to check your vitamin levels?</p></div>
+    <a class="btn" href="{{ url_for('check') }}">＋ New vitamin check</a>
+  </div>
+  <div class="page-head"><h2 style="margin:0">Recent reports</h2>{% if recent %}<a href="{{ url_for('history') }}">View all →</a>{% endif %}</div>
+  {% if recent %}
+  <div class="recent">
+    {% for a in recent %}{% set flags = a.flags %}{% set n = flags.values()|sum %}
+    <a class="card" href="{{ url_for('result', aid=a.id) }}" style="color:inherit">
+      <div class="muted" style="font-size:.82rem">{{ a.created_at }} UTC</div>
+      <h3 style="margin:6px 0 12px">{% if n %}{{ n }} low vitamin{{ 's' if n>1 }}{% else %}All normal ✅{% endif %}</h3>
+      {% include "_status_dots.html" %}
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card empty"><div class="big">🧪</div><h3>No checks yet</h3><p class="muted">Run your first check to see results here.</p>
+    <a class="btn btn-primary" href="{{ url_for('check') }}">Start a check</a></div>
+  {% endif %}
+</div>
+{% endblock %}

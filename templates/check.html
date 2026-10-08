@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}New check{% endblock %}
+{% block content %}
+<div class="container page" style="max-width:860px">
+  <div class="page-head"><div><h1>New vitamin check</h1><p class="muted" style="margin:6px 0 0">Enter the values from your lab report. Ranges shown are the scale used to train the model.</p></div></div>
+  <form method="post" novalidate>
+    <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+    <div class="vit-form">
+      {% for v in ORDER %}{% set i = VITAMINS[v] %}
+      <div class="vit-field">
+        <div class="badge" style="background:{{ i.color }}22">{{ i.icon }}</div>
+        <div style="flex:1"><label for="v_{{ v }}">{{ i.name }}</label>
+          <input id="v_{{ v }}" name="v_{{ v }}" type="number" step="any" min="0" inputmode="decimal" required placeholder="e.g. {{ '%g' % ((ranges[v][0] + ranges[v][1]) / 2) }}" value="{{ values.get('v_' ~ v, '') }}">
+          <small>Range {{ '%g' % ranges[v][0] }} – {{ '%g' % ranges[v][1] }}</small></div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="actions" style="margin-top:24px"><button class="btn btn-primary">Analyse my levels →</button><a class="btn btn-ghost" href="{{ url_for('dashboard') }}">Cancel</a></div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}Sign in{% endblock %}{% block nav %}{% endblock %}{% block footer %}{% endblock %}
+{% block content %}
+<div class="auth">
+  {% set heading = "Welcome back 👋" %}{% set text = "Sign in to see your past results, run a new check and download your reports." %}
+  {% include "_auth_side.html" %}
+  <main class="auth-main"><div class="auth-box">
+    <h1>Sign in</h1><p class="muted" style="margin-bottom:26px">Enter your details to continue.</p>
+    <form method="post" novalidate>
+      <input type="hidden" name="csrf" value="{{ csrf_token() }}">
+      <div class="field"><label for="email">Email</label>
+        <div class="input-wrap"><span class="lead-ico">✉️</span><input class="input" id="email" name="email" type="email" value="{{ email }}" placeholder="you@example.com" autocomplete="email" required autofocus></div></div>
+      <div class="field"><label for="password">Password</label>
+        <div class="input-wrap"><span class="lead-ico">🔒</span><input class="input" id="password" name="password" type="password" placeholder="Your password" autocomplete="current-password" required>
+          <button type="button" class="toggle-pw" data-target="password">Show</button></div></div>
+      <button class="btn btn-primary btn-block" style="margin-top:8px">Sign in →</button>
+    </form>
+    <p class="alt">New here? <a href="{{ url_for('register') }}"><b>Create an account</b></a></p>
+  </div></main>
+</div>
+{% endblock %}

@@ -1,0 +1,1 @@
+<div class="dots">{% for v in ORDER %}<span class="dot {{ 'low' if flags[v] }}" title="{{ VITAMINS[v].name }}: {{ 'Low' if flags[v] else 'Normal' }}">{{ v }}</span>{% endfor %}</div>

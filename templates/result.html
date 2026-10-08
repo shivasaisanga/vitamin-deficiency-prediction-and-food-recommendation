@@ -1,0 +1,48 @@
+{% extends "base.html" %}{% block title %}Report #{{ '%05d' % a.id }}{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="page-head">
+    <div><h1>Your results</h1><p class="muted" style="margin:6px 0 0">Report #{{ '%05d' % a.id }} · {{ a.created_at }} UTC</p></div>
+    <div class="actions">
+      <a class="btn btn-primary" href="{{ url_for('report_pdf', aid=a.id) }}">⬇ Download PDF</a>
+      <a class="btn btn-ghost" href="{{ url_for('check') }}">New check</a>
+    </div>
+  </div>
+
+  {% if deficient %}
+  <div class="summary bad"><div class="big">⚠️</div><div><h2>{{ deficient|length }} of 6 vitamins look low</h2>
+    <p>{% for v in deficient %}{{ VITAMINS[v].name }}{{ ', ' if not loop.last }}{% endfor %}. See the food plan below.</p></div></div>
+  {% else %}
+  <div class="summary good"><div class="big">🎉</div><div><h2>All 6 vitamins are in range</h2><p>Great news. Keep eating a varied, balanced diet.</p></div></div>
+  {% endif %}
+
+  <div class="res-grid">
+    {% for v in ORDER %}{% set i = VITAMINS[v] %}{% set low = a.flags[v] %}
+    {% set lo, hi = ranges[v] %}{% set pct = ((a.levels[v] - lo) / (hi - lo) * 100)|round|int %}{% set pct = [[pct,2]|max,98]|min %}
+    {% set cut = ((cutoffs[v] - lo) / (hi - lo) * 100) %}
+    <div class="res {{ 'low' if low }}">
+      <div class="top"><b>{{ i.icon }} {{ i.name }}</b><span class="status">{{ 'LOW' if low else 'NORMAL' }}</span></div>
+      <div class="val">{{ '%g' % a.levels[v] }}</div>
+      <div class="meter"><b style="left:{{ cut }}%"></b><i style="left:{{ pct }}%"></i></div>
+      <small class="cap">Low at or below {{ '%g' % cutoffs[v] }} (marker)</small>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if deficient %}
+  <h2 style="font-size:1.4rem;margin-bottom:14px">🍽️ Your food plan</h2>
+  {% if group %}<div class="pattern"><div class="big">{{ group[1] }}</div><div><b>Suggested pattern: {{ group[0] }}</b><div class="muted">{{ group[2] }}</div></div></div>{% endif %}
+  <div class="reco">
+    {% for v in deficient %}{% set i = VITAMINS[v] %}
+    <div class="card">
+      <h3>{{ i.icon }} {{ i.name }}</h3>
+      <p class="muted" style="margin:0 0 4px">{{ i.role }}</p>
+      <div class="food-tags">{% for f in i.foods %}<span>{{ f }}</span>{% endfor %}</div>
+      <p style="margin:14px 0 0;font-size:.86rem"><b>Possible signs:</b> <span class="muted">{{ i.symptoms }}</span></p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="notice"><b>Please note:</b> {{ disclaimer }}</div>
+</div>
+{% endblock %}
